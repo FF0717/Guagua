@@ -943,7 +943,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `正经摸鱼-备份-${todayKey()}.json`;
+    a.download = `摸摸鱼-备份-${todayKey()}.json`;
     a.click();
     URL.revokeObjectURL(url);
     toast(state.entries.length ? `已导出 ${state.entries.length} 条` : "已导出（当前还没有打卡）");

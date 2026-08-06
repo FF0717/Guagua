@@ -1,6 +1,6 @@
 {
-  "name": "正经摸鱼",
-  "short_name": "正经摸鱼",
+  "name": "摸摸鱼",
+  "short_name": "摸摸鱼",
   "description": "摸鱼时学一点真东西，每天一个小知识",
   "start_url": "./index.html",
   "display": "standalone",
