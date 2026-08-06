@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <meta name="theme-color" content="#e8a05c" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="正经摸鱼" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" href="icons/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;600;700;800&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <title>正经摸鱼</title>
+</head>
+<body>
+  <div id="app" data-view="home">
+    <div class="brand-box">
+      <span class="brand brand-in-box">正经摸鱼</span>
+      <p class="brand-tagline">每天摸一点，正经学一点</p>
+    </div>
+    <header class="topbar">
+      <div class="topbar-brand">
+        <h1 class="brand">正经摸鱼</h1>
+      </div>
+    </header>
+
+    <main id="views">
+      <!-- HOME -->
+      <section class="view active" data-view="home" id="view-home">
+        <div class="hero card-hero" id="inspireCard">
+          <div class="hero-copy">
+            <p class="hero-kicker">今日灵感</p>
+            <h2 id="heroTitle">换个领域，学点新的</h2>
+            <p class="hero-sub" id="heroSub">不知道学什么时，先抽一个主题试试。</p>
+            <div class="hero-actions">
+              <button class="hero-btn ghost" type="button" id="shuffleInspireBtn">换一换</button>
+            </div>
+          </div>
+          <div class="hero-orb" aria-hidden="true">
+            <span class="orb-book" id="heroOrb"></span>
+          </div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-pill">
+            <strong id="statStreak">0</strong>
+            <span>连续天数</span>
+          </div>
+          <div class="stat-pill">
+            <strong id="statWeek">0</strong>
+            <span>本周</span>
+          </div>
+          <div class="stat-pill">
+            <strong id="statTotal">0</strong>
+            <span>累计</span>
+          </div>
+        </div>
+
+        <div class="panel theme-card">
+          <div class="theme-copy">
+            <strong>本周主题</strong>
+            <em id="themeLabel">还没设定，点右边选一个领域专注练</em>
+          </div>
+          <button class="theme-btn" type="button" id="themePickBtn">设定</button>
+        </div>
+
+        <div class="section-head">
+          <h3>快捷入口</h3>
+        </div>
+        <button class="panel review-banner" data-action="review" type="button" aria-label="随机复习">
+          <span class="review-mark" aria-hidden="true">复</span>
+          <div class="review-copy">
+            <strong>随机复习</strong>
+            <em>翻一张以前学过的知识卡片</em>
+          </div>
+          <span class="review-arrow" aria-hidden="true">›</span>
+        </button>
+
+        <div class="panel progress-card">
+          <div class="progress-copy">
+            <strong>本周目标</strong>
+            <em>7 天打卡</em>
+            <div class="bar"><i id="weekBar"></i></div>
+          </div>
+          <div class="ring" id="weekRing" aria-label="本周进度">
+            <svg viewBox="0 0 36 36">
+              <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              <path class="ring-fg" id="weekRingFg" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            </svg>
+            <strong id="weekPct">0%</strong>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <h3>最近知识卡片</h3>
+          <button class="text-link" data-goto="records" type="button">全部</button>
+        </div>
+        <div id="recentList" class="card-list"></div>
+      </section>
+
+      <!-- RECORDS -->
+      <section class="view" data-view="records" id="view-records">
+        <div class="section-head tight">
+          <h3>学习记录</h3>
+        </div>
+        <label class="search-box">
+          <input id="searchInput" type="search" placeholder="搜索标题或笔记…" autocomplete="off" />
+        </label>
+        <div class="filter-row" id="filterRow"></div>
+        <div class="filter-row cat-filters" id="categoryFilterRow"></div>
+        <div id="recordsList" class="card-list"></div>
+        <p class="empty" id="recordsEmpty" hidden>还没有记录。点中间「+」写下今天学到的第一件事。</p>
+      </section>
+
+      <!-- CALENDAR -->
+      <section class="view" data-view="calendar" id="view-calendar">
+        <div class="cal-head">
+          <button class="icon-btn" id="prevMonth" type="button" aria-label="上个月">‹</button>
+          <div class="cal-pickers">
+            <label class="cal-picker">
+              <select id="calYearSelect" aria-label="选择年份"></select>
+              <span>年</span>
+            </label>
+            <label class="cal-picker">
+              <select id="calMonthSelect" aria-label="选择月份">
+                <option value="0">1月</option>
+                <option value="1">2月</option>
+                <option value="2">3月</option>
+                <option value="3">4月</option>
+                <option value="4">5月</option>
+                <option value="5">6月</option>
+                <option value="6">7月</option>
+                <option value="7">8月</option>
+                <option value="8">9月</option>
+                <option value="9">10月</option>
+                <option value="10">11月</option>
+                <option value="11">12月</option>
+              </select>
+            </label>
+          </div>
+          <button class="icon-btn" id="nextMonth" type="button" aria-label="下个月">›</button>
+        </div>
+        <div class="cal-weekdays">
+          <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+        <div class="cal-legend">
+          <span>少</span>
+          <i class="lg l0"></i><i class="lg l1"></i><i class="lg l2"></i><i class="lg l3"></i><i class="lg l4"></i>
+          <span>多</span>
+        </div>
+        <div class="section-head">
+          <h3 id="dayDetailTitle">当日知识</h3>
+        </div>
+        <div id="dayDetailList" class="card-list"></div>
+      </section>
+
+      <!-- SUMMARY -->
+      <section class="view" data-view="summary" id="view-summary">
+        <div class="summary-tabs">
+          <button class="sum-tab active" data-range="week" type="button">本周</button>
+          <button class="sum-tab" data-range="month" type="button">本月</button>
+          <button class="sum-tab" data-range="year" type="button">今年</button>
+        </div>
+
+        <div class="big-stats">
+          <div class="big-stat">
+            <strong id="sumCount">0</strong>
+            <span id="sumCountLabel">本周学到</span>
+          </div>
+          <div class="big-stat">
+            <strong id="sumDays">0</strong>
+            <span>打卡天数</span>
+          </div>
+          <div class="big-stat">
+            <strong id="sumBest">0</strong>
+            <span>最长连续</span>
+          </div>
+        </div>
+
+        <div class="insight-card" id="insightCard">
+          <p class="insight-label">小结</p>
+          <p id="insightText">坚持每天学一点点，手机时间会慢慢变得有意义。</p>
+        </div>
+
+        <div class="panel backup-card">
+          <div class="theme-copy">
+            <strong>数据备份</strong>
+            <em>换手机或怕丢记录时，先导出一份</em>
+          </div>
+          <div class="backup-actions">
+            <button class="theme-btn" type="button" id="exportBtn">导出</button>
+            <button class="theme-btn" type="button" id="importBtn">导入</button>
+          </div>
+          <input id="importFile" type="file" accept="application/json,.json" hidden />
+        </div>
+
+        <div class="section-head">
+          <h3 id="sumListTitle">本周知识</h3>
+        </div>
+        <div id="summaryList" class="card-list"></div>
+      </section>
+    </main>
+
+    <nav class="tabbar" aria-label="主导航">
+      <button class="tab active" data-goto="home" type="button">
+        <span class="tab-ico">⌂</span>
+        <span>首页</span>
+      </button>
+      <button class="tab" data-goto="records" type="button">
+        <span class="tab-ico">☰</span>
+        <span>记录</span>
+      </button>
+      <button class="tab fab-wrap" data-action="add" type="button" aria-label="新增打卡">
+        <span class="fab">＋</span>
+      </button>
+      <button class="tab" data-goto="calendar" type="button">
+        <span class="tab-ico">▦</span>
+        <span>日历</span>
+      </button>
+      <button class="tab" data-goto="summary" type="button">
+        <span class="tab-ico">◎</span>
+        <span>总结</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- ADD / EDIT SHEET -->
+  <div class="sheet" id="editorSheet" hidden>
+    <div class="sheet-backdrop" data-close="editor"></div>
+    <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="editorTitle">
+      <div class="sheet-handle"></div>
+      <h2 id="editorTitle">今日打卡</h2>
+      <form id="entryForm">
+        <label>
+          <span>今天学了什么 *</span>
+          <input id="fieldTitle" name="title" maxlength="60" placeholder="一个词、一个概念、一个发现…" required />
+        </label>
+        <div class="field-block">
+          <div class="field-label-row">
+            <span>分类 *</span>
+            <input id="categorySearch" type="search" placeholder="搜索分类…" autocomplete="off" />
+          </div>
+          <input type="hidden" id="fieldCategory" name="category" value="其他" />
+          <div class="category-grid" id="categoryGrid"></div>
+          <div class="custom-cat-row">
+            <input id="customCategoryInput" maxlength="12" placeholder="自定义分类，如：围棋" />
+            <button type="button" class="btn ghost compact" id="addCategoryBtn">添加</button>
+          </div>
+        </div>
+        <label>
+          <span>知识笔记 *</span>
+          <textarea id="fieldNote" name="note" rows="5" maxlength="2000" placeholder="用自己的话写下来：它是什么？为什么值得记住？" required></textarea>
+        </label>
+        <label>
+          <span>来源 / 灵感（可选）</span>
+          <input id="fieldSource" name="source" maxlength="80" placeholder="书、播客、新闻、聊天、纪录片…" />
+        </label>
+        <div class="sheet-actions">
+          <button type="button" class="btn ghost" data-close="editor">取消</button>
+          <button type="submit" class="btn primary">保存打卡</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- DETAIL SHEET -->
+  <div class="sheet" id="detailSheet" hidden>
+    <div class="sheet-backdrop" data-close="detail"></div>
+    <div class="sheet-panel detail-panel" role="dialog" aria-modal="true">
+      <div class="sheet-handle"></div>
+      <div class="detail-top">
+        <span class="tag" id="detailCategory">其他</span>
+        <time id="detailDate"></time>
+      </div>
+      <h2 id="detailTitle"></h2>
+      <div class="quiz-wrap" id="quizWrap">
+        <p class="detail-note hidden-note" id="detailNote"></p>
+        <button type="button" class="btn primary quiz-reveal" id="revealNoteBtn">先想想，再点开看笔记</button>
+      </div>
+      <p class="detail-source" id="detailSource" hidden></p>
+      <div class="sheet-actions triple">
+        <button type="button" class="btn ghost" id="starEntryBtn">收藏</button>
+        <button type="button" class="btn ghost danger" id="deleteEntryBtn">删除</button>
+        <button type="button" class="btn primary" data-close="detail">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- THEME SHEET -->
+  <div class="sheet" id="themeSheet" hidden>
+    <div class="sheet-backdrop" data-close="theme"></div>
+    <div class="sheet-panel" role="dialog" aria-modal="true">
+      <div class="sheet-handle"></div>
+      <h2>设定本周主题</h2>
+      <p class="sheet-hint">这周主攻一个领域，打卡时会优先提示你。</p>
+      <input id="themeSearch" type="search" placeholder="搜索分类…" autocomplete="off" />
+      <div class="category-grid" id="themeGrid"></div>
+      <div class="sheet-actions">
+        <button type="button" class="btn ghost" id="clearThemeBtn">清除主题</button>
+        <button type="button" class="btn primary" data-close="theme">完成</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
