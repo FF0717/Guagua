@@ -1,7 +1,7 @@
 {
   "name": "摸摸鱼",
   "short_name": "摸摸鱼",
-  "description": "摸鱼时学一点真东西，每天一个小知识",
+  "description": "摸摸鱼 · 私人手账，记录发现与日常",
   "start_url": "./index.html",
   "display": "standalone",
   "theme_color": "#e8a05c",

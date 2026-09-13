@@ -1,0 +1,548 @@
+@import "tailwindcss";
+
+/* 极影毁片圆 · OFL · 本地嵌入（安卓/他人打开也能用） */
+@font-face {
+  font-family: "JiYing HuiPian Yuan";
+  src: url("/fonts/jiying-huipian-yuan.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 小赖字体 · 知识详情正文 */
+@font-face {
+  font-family: "Xiaolai";
+  src: url("/fonts/xiaolai-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Colors extracted / matched from final UI board */
+@theme {
+  --color-cream: #fdfbf8;
+  --color-cream-deep: #f7f4f0;
+  --color-card-border: #faf4ee;
+  --color-card: #ffffff;
+  --color-fish: #f8c860;
+  --color-fish-deep: #e8b24e;
+  --color-know: #f3eefc;
+  --color-know-ink: #6b5b8c;
+  --color-life: #e4f2e8;
+  --color-life-ink: #4a7357;
+  --color-spend: #fcf2d8;
+  --color-spend-ink: #9a7040;
+  --color-note: #f9e9e8;
+  --color-note-ink: #8c5b5b;
+  --color-highlight: #ffd86b;
+  --color-ink: #2c2a26;
+  --color-muted: #9a9690;
+  --color-line: rgba(44, 42, 38, 0.06);
+  --font-sans: "JiYing HuiPian Yuan", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+  --font-rounded: "JiYing HuiPian Yuan", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+  /* 小赖字体 · 知识详情正文 */
+  --font-kai: "Xiaolai", "PingFang SC", "Noto Sans SC", sans-serif;
+  --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.03);
+  --shadow-card: 0 4px 16px rgba(60, 50, 30, 0.03);
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+    height: 100dvh;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    background: var(--color-cream);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+    overflow: hidden;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+}
+
+.phone-stage {
+  height: 100%;
+  height: 100dvh;
+  min-height: 100%;
+  min-height: 100dvh;
+  background: var(--color-cream);
+  overflow: hidden;
+}
+
+.phone-shell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  min-height: 100%;
+  min-height: 100dvh;
+  background: var(--color-cream);
+  overflow: hidden;
+}
+
+.phone-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* 手机：导航钉在屏幕底，不随页面滑动 */
+.app-tabbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+}
+
+@media (min-width: 700px) {
+  html,
+  body,
+  #root {
+    height: auto;
+    min-height: 100%;
+  }
+
+  body {
+    background: #faf4ed;
+    overflow: auto;
+  }
+
+  .phone-stage {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    box-sizing: border-box;
+    height: auto;
+    min-height: 100%;
+    padding: 28px 16px;
+    background: #faf4ed;
+    overflow: visible;
+  }
+
+  .phone-shell {
+    width: min(440px, 100%);
+    height: calc(100dvh - 56px);
+    min-height: calc(100dvh - 56px);
+    max-height: calc(100dvh - 56px);
+    border-radius: 32px;
+    background: var(--color-cream);
+    border: 1px solid #faf4ee;
+    box-shadow: 0 6px 24px rgba(150, 135, 120, 0.06);
+    overflow: hidden;
+  }
+
+  .phone-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  .app-tabbar {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    flex-shrink: 0;
+  }
+}
+
+.font-rounded {
+  font-family: var(--font-rounded);
+  font-variant-numeric: proportional-nums;
+}
+
+@layer utilities {
+  .safe-pt {
+    /* 浏览器里地址栏已占顶；勿再强制 44px，否则问候语上方会空一大截 */
+    padding-top: calc(env(safe-area-inset-top, 0px) + 10px);
+  }
+
+  .safe-pb {
+    /* 为固定底栏 + 中间小鱼留空 */
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 108px);
+  }
+
+  .safe-header-pt {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 10px);
+  }
+
+  .card-shadow {
+    box-shadow: var(--shadow-card);
+  }
+
+  .card-border {
+    border: 2px solid var(--color-card-border);
+    box-shadow:
+      0 0 0 1px rgba(250, 244, 238, 0.35),
+      0 2px 8px rgba(160, 145, 130, 0.04);
+  }
+
+  .page-push {
+    position: absolute;
+    inset: 0;
+    z-index: 45;
+    height: 100%;
+    max-height: 100%;
+    transform: translateX(100%);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    background: var(--color-cream);
+    /* 勿用 pan-y，会吃掉左缘右滑 */
+    touch-action: manipulation;
+  }
+
+  .page-push-in {
+    transform: translateX(0);
+  }
+
+  .page-push-dragging {
+    transition: none !important;
+    touch-action: none !important;
+  }
+
+  .page-push-settling {
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    touch-action: none !important;
+  }
+
+  /* 随机复习：中间卡片前后翻转弹出 */
+  .loot-flip-scene {
+    perspective: 1200px;
+  }
+
+  .loot-flip-card {
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    transform-origin: center center;
+    transition:
+      transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.55s ease;
+  }
+
+  .loot-flip-out .loot-flip-card {
+    transform: translateY(-20px) rotateY(88deg) scale(0.92);
+    opacity: 0;
+  }
+
+  .loot-flip-in .loot-flip-card {
+    transform: translateY(-20px) rotateY(0deg) scale(1);
+    opacity: 1;
+  }
+
+  /* 随机复习背后：奶油底 + 轻纹理（方案 4） */
+  .loot-scrim {
+    position: absolute;
+    inset: 0;
+    border: 0;
+    padding: 0;
+    background: #fffaf3;
+  }
+
+  .loot-scrim::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.55;
+    background-image:
+      radial-gradient(circle at 18% 22%, rgba(248, 200, 96, 0.18) 0 42px, transparent 43px),
+      radial-gradient(circle at 82% 18%, rgba(200, 180, 160, 0.12) 0 28px, transparent 29px),
+      radial-gradient(circle at 70% 78%, rgba(248, 200, 96, 0.12) 0 50px, transparent 51px),
+      radial-gradient(circle at 24% 70%, rgba(180, 170, 155, 0.1) 0 36px, transparent 37px);
+  }
+}
+
+@keyframes fish-swim {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(2deg);
+  }
+}
+
+/* 导航栏小鱼：触发时慢速甩一下尾巴 */
+@keyframes tab-fish-wag {
+  0% {
+    transform: rotate(0deg);
+  }
+  18% {
+    transform: rotate(-6deg);
+  }
+  40% {
+    transform: rotate(6deg);
+  }
+  62% {
+    transform: rotate(-3.5deg);
+  }
+  82% {
+    transform: rotate(2deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.tab-fish-wag {
+  transform-origin: 68% 52%;
+}
+
+.tab-fish-wag-on {
+  animation: tab-fish-wag 1.8s ease-in-out 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab-fish-wag-on {
+    animation: none;
+  }
+}
+
+/* 点小鱼：屏幕中间弹幕 */
+@keyframes fish-danmaku-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fish-danmaku-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.98);
+  }
+}
+
+.fish-danmaku-in {
+  animation: fish-danmaku-in 0.28s ease-out both;
+}
+
+.fish-danmaku-out {
+  animation: fish-danmaku-out 0.35s ease-in both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fish-danmaku-in,
+  .fish-danmaku-out {
+    animation: none;
+  }
+}
+
+/* 首页：问候语 + 小鱼 */
+.fish-home-hero {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.fish-home-greet {
+  box-sizing: border-box;
+}
+
+/* 首次起名：空名字点确认时输入框轻震 */
+@keyframes name-onboard-input-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  50% {
+    transform: translateX(3px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+}
+
+.name-onboard-input-shake {
+  animation: name-onboard-input-shake 0.32s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .name-onboard-input-shake {
+    animation: none;
+  }
+}
+
+/* 记录页顶部：鱼尺寸固定；气泡吃剩余宽度卡在左右边内往里收（不硬裁整组） */
+.fish-page-hero {
+  --fish-slot: 122px;
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  align-items: center;
+  gap: 6px;
+  /* 左边与下方卡片齐；右侧略留空不贴鱼 */
+  padding-left: 0;
+  padding-right: 4px;
+  overflow: visible;
+}
+
+.fish-page-hero-large {
+  --fish-slot: 136px;
+}
+
+.fish-page-bubble {
+  flex: 1 1 0;
+  min-width: 0;
+  padding-right: 7px;
+  /* 加长气泡，仍与鱼保持一点距离 */
+  margin-right: 8px;
+}
+
+.fish-page-bubble-tight,
+.fish-page-bubble-tighter {
+  width: auto;
+}
+
+.fish-page-bubble-main {
+  position: relative;
+  z-index: 1;
+  max-width: 100%;
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow: 0 6px 16px rgba(120, 95, 70, 0.06);
+}
+
+.fish-page-tail {
+  position: absolute;
+  top: 50%;
+  right: 2px;
+  /* 叠在气泡外阴影之上，避免尖角下半被打湿发沉；自身不再带阴影 */
+  z-index: 2;
+  width: 18px;
+  height: 18px;
+  margin-top: -9px;
+  background: #ffffff;
+  border-radius: 3px;
+  transform: rotate(45deg);
+  box-shadow: none;
+}
+
+.fish-page-fish {
+  position: relative;
+  z-index: 3;
+  flex: 0 0 var(--fish-slot);
+  width: var(--fish-slot);
+  max-width: var(--fish-slot);
+  height: 128px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.fish-page-hero-large .fish-page-fish {
+  height: 140px;
+}
+
+/* 单行不换行、不省略；字号偏可读 */
+.fish-page-bubble-title,
+.fish-page-bubble-sub {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+.fish-page-bubble-title {
+  font-size: clamp(14px, 3.9vw, 16px);
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: 0;
+  color: var(--color-ink);
+}
+
+.fish-page-bubble-sub {
+  margin-top: 7px;
+  font-size: clamp(12px, 3.3vw, 13px);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0;
+  color: var(--color-muted);
+}
+
+@keyframes fish-happy {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  30% {
+    transform: translateY(-10px) scale(1.06) rotate(-6deg);
+  }
+  60% {
+    transform: translateY(-4px) scale(1.03) rotate(6deg);
+  }
+}
+
+@keyframes bubble {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.6);
+  }
+  30% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-28px) scale(1);
+  }
+}
+
+@keyframes zzz {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+}
+
+.fish-swim {
+  animation: fish-swim 3s ease-in-out infinite;
+}
+
+.fish-happy {
+  animation: fish-happy 0.9s ease;
+}
+
+.fish-bubble {
+  animation: bubble 1.2s ease-out infinite;
+}
+
+.fish-zzz {
+  animation: zzz 1.6s ease-in-out infinite;
+}
